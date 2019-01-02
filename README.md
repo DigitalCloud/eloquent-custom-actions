@@ -10,7 +10,7 @@ Like laravel scope, you can add the required event by prefixing the function wit
 You can install the package via composer:
 
 ```bash
-composer require digitalcloud/eventable
+composer require digitalcloud/eloquent-custom-actions
 ```
 
 ## Usage Example
