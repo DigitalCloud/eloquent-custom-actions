@@ -15,33 +15,71 @@ composer require digitalcloud/eloquent-custom-actions
 
 ## Usage Example
 
+Without this package, to simulate the eloquent events, you will end with:
 
-In the user model, we declare actionVerify function and add the logic you need, the package will fire beforeVerify and  afterVerify events automatically, so you need to map event and event listener to these events.
+```php
+
+class User extends Authenticatable
+    
+    public function verify($mobile)
+    {
+        $userMobile = new UserMobile([
+            'mobile' => $mobile, 'status' => self::STATUS_VERIFIED
+        ]);
+
+        if(app()->events->until(
+            event(new MobileVerifying($userMobile)) !== false
+        )){
+            $userMobile = $this->mobiles()->save($userMobile);
+            event(new MobileVerified($userMobile));
+            return $userMobile;
+        }
+        
+        return false;
+    }
+}
+``` 
+
+To simplify your `User` model, declare `action{MethodName}` method and remove all event related codes, the package will automatically fire `before{Method}` and `after{Method}` events when `$user->verify($mobile)` invoked.
 
 ```php
 <?php
 
-namespace App;
+class User extends Authenticatable
+{
+    
+    public function actionVerify($mobile) {
+        return $userMobile = $this->mobiles()->save([
+            'mobile' => $mobile, 'status' => self::STATUS_VERIFIED
+        ]);
+    }
+}
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+```
+
+## Use dispatchesEvents
+
+As eloquent events, you can map the dispatched events using `$dispatchesEvents` proparity
+
+```php
+<?php
 
 class User extends Authenticatable
 {
     
-    public function actionVerify($data = []) {
-        dump('User Verify.');
-    }
+    public function actionVerify($mobile) { }
     
-    // map the built-in events to custom events
     protected $dispatchesEvents = [
-        'beforeVerify' => \App\Events\BeforeUserVerify::class,
-        'afterVerify' => \App\Events\AfterUserVerify::class
+        'beforeVerify' => MobileVerifying::class,
+        'afterVerify' => MobileVerified::class
     ];
 }
 
 ```
 
-In our EventServiceProvider, we need to add listener to the $listen property, to allow dispatching events to it's listener:
+## Use EventServiceProvider
+
+You can map events to listener as usual in EventServiceProvider, you can use both string event name or the mapped events from the `dispatchesEvents`:
 
 ```php
 <?php
@@ -55,8 +93,13 @@ class EventServiceProvider extends ServiceProvider
     // ...
     
     protected $listen = [
-        \App\Events\BeforeUserVerify::class => [\App\Listeners\BeforeUserVerify::class],
-        \App\Events\AfterUserVerify::class => [\App\Listeners\AfterUserVerify::class],
+        MobileVerifying::class => [ SomeListener::class ],
+        MobileVerified::class => [ SomeListener::class ],
+        
+        // or
+        
+        'eloquent.beforeVerify: App\User' => [ SomeListener::class ],
+        'eloquent.afterVerify: App\User' => [ SomeListener::class ],
     ];
     
     // ...
@@ -64,23 +107,5 @@ class EventServiceProvider extends ServiceProvider
 
 ```
 
-And now, you just need to call $user->verify() to execute the beforeVerify nad then the code, and finally the afterVerify event.
+## Use Model Observer
 
-```php
-
-<?php
-
-$user = \App\User::find(1);
-$user->verify();
-
-```
-
-The output is:
-
-```
-"App\Listeners\BeforeUserVerify::handle"
-
-"User Verify."
-
-"App\Listeners\AfterUserVerify::handle"
-```
