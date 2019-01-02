@@ -126,3 +126,52 @@ class User extends Authenticatable
 ```
 
 and then you cn add beforeVerify and afterVerify functions in the ModelObserver class same as other eloqunt functions.
+
+```
+<?php
+
+namespace App\Observers;
+
+use App\User;
+
+class UserObserver
+{
+    public function created(User $user)
+    {
+        //
+    }
+
+    public function updated(User $user)
+    {
+        //
+    }
+
+    public function deleted(User $user)
+    {
+        //
+    }
+
+    public function restored(User $user)
+    {
+        //
+    }
+
+    public function forceDeleted(User $user)
+    {
+        //
+    }
+
+    public function beforeVerify(User $user)
+    {
+        dump('UserObserver::beforeVerify');
+    }
+
+    public function afterVerify(User $user)
+    {
+        dump('UserObserver::afterVerify');
+    }
+
+}
+
+
+```
