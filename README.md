@@ -1,9 +1,6 @@
 # Laravel Eloquent Custom Actions.
 
-When working with big projects, it's important to split the big task into smaller one, and in many cases it's very recommended to work with events to execute each part of the code. Take for example, we need to add user mobile in the system, but adding the user mobile has some attaches events to be accomplished before and after the user mobile added. For example,
-once the user verified new mobile number, we must delete not verified users linked to this number, delete all related activation codes, link mobile with the current user, delete invalid invitation based on some criteria, and finally notify the user if he/she have new invitation based on the new number.
-
-Like laravel scope, you can add the required event by prefixing the function with the world action, like "actionVerify"", and the package will fire the beforeVerify and afterVerify events. All you need is to listen to these events and map put your functionality in the event listener for each event.
+The package idea inspired from laravel eloquent events functionallity and eloquent scope code style. If you like the Event driven development approach, this package can dramatically clean your model codes.
 
 ## Installation
 
@@ -136,42 +133,29 @@ use App\User;
 
 class UserObserver
 {
-    public function created(User $user)
-    {
-        //
-    }
+    // Default eloquent actions
+    public function created(User $user){ }
 
-    public function updated(User $user)
-    {
-        //
-    }
+    // Custom eloquent actions
+    public function beforeVerify(User $user){ }
 
-    public function deleted(User $user)
-    {
-        //
-    }
-
-    public function restored(User $user)
-    {
-        //
-    }
-
-    public function forceDeleted(User $user)
-    {
-        //
-    }
-
-    public function beforeVerify(User $user)
-    {
-        dump('UserObserver::beforeVerify');
-    }
-
-    public function afterVerify(User $user)
-    {
-        dump('UserObserver::afterVerify');
-    }
-
+    public function afterVerify(User $user){ }
 }
-
-
 ```
+
+## Stopping The Propagation Of An Event
+As mentioned in the Laravel docs:
+
+> Sometimes, you may wish to stop the propagation of an event to other listeners. You may do so by returning `false` from your listener's handle method.
+
+If any `before{Action}` listener return `false` the process will be stoped, and the real action will not excute.
+
+## Roadmap
+
+We currently working on:
+
+- [ ] Support model boot method
+- [ ] Support model policy
+- [ ] Rollback the `before{Action}` effect if one listener return false
+
+
