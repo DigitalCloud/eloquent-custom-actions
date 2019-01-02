@@ -1,8 +1,9 @@
 {
-    "name": "digitalcloud/eventable",
-    "description": "A Laravel Eventable.",
+    "name": "digitalcloud/eloquent-custom-actions",
+    "description": "Laravel Eloquent Custom Actions, make it easier to simulate eloquent events for custom actions.",
     "keywords": [
         "laravel",
+        "eloquent",
         "event",
         "listener",
         "package"
@@ -13,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "DigitalCloud\\Eventable\\": "src/"
+            "DigitalCloud\\EloquentActions\\": "src/"
         }
     },
     "config": {
