@@ -77,8 +77,10 @@ $user->verify();
 
 The output is:
 
+```
 "App\Listeners\BeforeUserVerify::handle"
 
 "User Verify."
 
 "App\Listeners\AfterUserVerify::handle"
+```
