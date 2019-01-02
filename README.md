@@ -1,4 +1,4 @@
-# Laravel Eventable.
+# Laravel Eloquent Custom Actions.
 
 When working with big projects, it's important to split the big task into smaller one, and in many cases it's very recommended to work with events to execute each part of the code. Take for example, we need to add user mobile in the system, but adding the user mobile has some attaches events to be accomplished before and after the user mobile added. For example,
 once the user verified new mobile number, we must delete not verified users linked to this number, delete all related activation codes, link mobile with the current user, delete invalid invitation based on some criteria, and finally notify the user if he/she have new invitation based on the new number.
