@@ -1,6 +1,6 @@
 <?php
 
-namespace DigitalCloud\Eventable;
+namespace DigitalCloud\EloquentActions;
 
 use Closure;
 use ReflectionClass;
