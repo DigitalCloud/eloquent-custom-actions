@@ -1,6 +1,6 @@
 # Laravel Eloquent Custom Actions.
 
-The package idea inspired from laravel eloquent events functionallity and eloquent scope code style. If you like the Event driven development approach, this package can dramatically clean your model codes.
+The package idea inspired from laravel eloquent events functionallity and eloquent scope code style. If you like the Event driven development approach, this package can dramatically clean your model code.
 
 ## Installation
 
