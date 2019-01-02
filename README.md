@@ -108,4 +108,21 @@ class EventServiceProvider extends ServiceProvider
 ```
 
 ## Use Model Observer
+As eloquent observable, you can map the observable events using `$observables` proparity
 
+```php
+<?php
+
+class User extends Authenticatable
+{
+    
+    public function actionVerify($mobile) { }
+    
+    protected $observables = [
+        'beforeVerify', 'afterVerify'
+    ];
+}
+
+```
+
+and then you cn add beforeVerify and afterVerify functions in the ModelObserver class same as other eloqunt functions.
